@@ -304,7 +304,7 @@ class ModelEvaluator:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
             print(f"✓ Saved plot to {save_path}")
         
-        plt.show()
+        #plt.show()  # Disabled to avoid blocking
     
     def plot_classification_results(self,
                                    model: Any,
@@ -343,7 +343,7 @@ class ModelEvaluator:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
             print(f"✓ Saved plot to {save_path}")
         
-        plt.show()
+        #plt.show()  # Disabled to avoid blocking
         
         # Classification Report
         print("\nClassification Report:")
@@ -396,7 +396,7 @@ class ModelEvaluator:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
             print(f"✓ Saved comparison plot to {save_path}")
         
-        plt.show()
+        #plt.show()  # Disabled to avoid blocking
     
     def get_evaluation_report(self) -> Dict:
         """Lấy báo cáo đánh giá chi tiết"""

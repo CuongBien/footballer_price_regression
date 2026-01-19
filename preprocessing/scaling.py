@@ -21,14 +21,16 @@ class Scaler:
         Parameters:
         -----------
         method : str
-            Phương pháp scaling: 'standard', 'minmax', 'robust'
+            Phương pháp scaling: 'standard', 'minmax', 'robust', None (không scale)
         """
         self.method = method
         self.scaler = None
         self.scaled_columns = []
         
         # Khởi tạo scaler
-        if method == 'standard':
+        if method is None or method == 'none':
+            self.scaler = None  # Không scale
+        elif method == 'standard':
             self.scaler = StandardScaler()
         elif method == 'minmax':
             self.scaler = MinMaxScaler()
@@ -52,6 +54,11 @@ class Scaler:
         --------
         self
         """
+        # Nếu không scale, return ngay
+        if self.scaler is None:
+            self.scaled_columns = []
+            return self
+            
         numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
         
         if exclude_cols:
@@ -78,6 +85,9 @@ class Scaler:
         pd.DataFrame
             DataFrame đã được scale
         """
+        # Nếu không scale, return nguyên bản
+        if self.scaler is None:
+            return df.copy()
         df_scaled = df.copy()
         
         if len(self.scaled_columns) > 0:
