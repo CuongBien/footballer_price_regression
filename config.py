@@ -28,12 +28,12 @@ CATEGORICAL_ENCODING_METHOD = 'onehot'  # 'onehot', 'label', 'target'
 MAX_CATEGORIES = 10  # Giới hạn số categories cho OneHot
 
 # ==================== SCALING ====================
-SCALING_METHOD = 'standard'  # 'standard', 'minmax', 'robust'
+SCALING_METHOD = None  # Tắt scaling cho Custom Decision Tree. Options: None, 'standard', 'minmax', 'robust'
 
 # ==================== FEATURE ENGINEERING ====================
 CREATE_POLYNOMIAL_FEATURES = False
 POLYNOMIAL_DEGREE = 2
-FEATURE_SELECTION_METHOD = 'variance'  # 'variance', 'correlation', 'model_based'
+FEATURE_SELECTION_METHOD = None  # Tắt feature selection: None, 'variance', 'correlation', 'model_based'
 N_FEATURES_TO_SELECT = None  # None = keep all, hoặc số features muốn giữ
 
 # ==================== TRAIN/TEST SPLIT ====================
@@ -52,7 +52,18 @@ TARGET_COLUMN = 'Value_Numeric'  # Cột target
 
 # Models để train
 MODELS = {
-    'regression': ['LinearRegression', 'Ridge', 'HistGradientBoosting']
+
+    'regression': [
+        'LinearRegression', 
+        'Ridge',
+        'HistGradientBoosting',
+        'CustomRegressionTree_MSE',   # Custom Decision Tree (MSE criterion) - TỰ LÀM
+        'CustomRegressionTree_MAE',   # Custom Decision Tree (MAE criterion) - TỰ LÀM
+    ],
+    'classification': [
+        'CustomDecisionTree_IG',      # Custom Decision Tree (Information Gain) - TỰ LÀM
+        'CustomDecisionTree_Gini',    # Custom Decision Tree (Gini Impurity) - TỰ LÀM
+    ]
 }
 
 # ==================== EVALUATION ====================
