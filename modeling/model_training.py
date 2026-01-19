@@ -7,6 +7,8 @@ Module 8: Model Training
 
 import pandas as pd
 import numpy as np
+import os
+import sys
 from sklearn.linear_model import LinearRegression, Ridge, Lasso, LogisticRegression
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
 from sklearn.ensemble import (
@@ -21,6 +23,21 @@ from typing import Dict, List, Optional, Any
 import pickle
 import warnings
 warnings.filterwarnings('ignore')
+
+# Import custom Decision Tree models
+try:
+    # Thêm path để import custom models
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(current_dir)
+    if project_root not in sys.path:
+        sys.path.insert(0, project_root)
+    
+    from decisionTree.Regression.regressionTree import RegressionTree as CustomRegressionTree
+    from decisionTree.Classification.classificationTree import DecisionTreeClassifier as CustomDecisionTreeClassifier
+    CUSTOM_TREE_AVAILABLE = True
+except ImportError as e:
+    CUSTOM_TREE_AVAILABLE = False
+    print(f"Warning: Custom Decision Tree not available: {e}")
 
 try:
     from xgboost import XGBRegressor, XGBClassifier
@@ -56,12 +73,54 @@ class ModelTrainer:
             self.models = {
                 'LinearRegression': LinearRegression(),
                 'Ridge': Ridge(random_state=self.random_state),
+                'DecisionTreeRegressor': DecisionTreeRegressor(
+                    max_depth=10, min_samples_split=5, random_state=self.random_state
+                ),
+                'RandomForestRegressor': RandomForestRegressor(
+                    n_estimators=100, max_depth=10, random_state=self.random_state, n_jobs=-1
+                ),
             }
+            # Thêm custom RegressionTree nếu available
+            if CUSTOM_TREE_AVAILABLE:
+                self.models['CustomRegressionTree_MSE'] = CustomRegressionTree(
+                    criterion='mse', max_depth=10, min_samples_split=5
+                )
+                self.models['CustomRegressionTree_MAE'] = CustomRegressionTree(
+                    criterion='mae', max_depth=10, min_samples_split=5
+                )
         else:  # classification
             self.models = {
+                'DecisionTreeClassifier': DecisionTreeClassifier(
+                    max_depth=10, min_samples_split=5, random_state=self.random_state
+                ),
+                'RandomForestClassifier': RandomForestClassifier(
+                    n_estimators=100, max_depth=10, random_state=self.random_state, n_jobs=-1
+                ),
             }
+            # Thêm custom DecisionTreeClassifier nếu available
+            if CUSTOM_TREE_AVAILABLE:
+                self.models['CustomDecisionTree_IG'] = CustomDecisionTreeClassifier(
+                    criterion='information_gain', max_depth=10, min_samples_split=5
+                )
+                self.models['CustomDecisionTree_Gini'] = CustomDecisionTreeClassifier(
+                    criterion='gini', max_depth=10, min_samples_split=5
+                )
             if XGBOOST_AVAILABLE:
                 self.models['XGBoost'] = XGBClassifier(random_state=self.random_state, n_jobs=-1)
+    
+    def add_model(self, name: str, model: Any):
+        """
+        Thêm model mới vào danh sách models
+        
+        Parameters:
+        -----------
+        name : str
+            Tên model
+        model : Any
+            Model instance (phải có phương thức fit, predict, score)
+        """
+        self.models[name] = model
+        print(f"✓ Added model: {name}")
     
     def train_single_model(self, 
                           model_name: str,
