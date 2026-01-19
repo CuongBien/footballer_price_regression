@@ -5,12 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb415ad2-ca4e-41b4-9f84-fa6df1d61a4b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/modeling/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/modeling/KNN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KNN/knn_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modeling/model_training.py" beforeDir="false" afterPath="$PROJECT_DIR$/modeling/model_training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/HistGradientBoosting.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/HistGradientBoosting.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/KNN.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/KNN.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/LinearRegression.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/LinearRegression.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/Ridge.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/Ridge.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/preprocessors/encoder.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/preprocessors/encoder.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/preprocessors/engineer.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/preprocessors/engineer.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/preprocessors/feature_names.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/preprocessors/feature_names.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/preprocessors/imputer.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/preprocessors/imputer.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/preprocessors/ml_encoder.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/preprocessors/ml_encoder.pkl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/preprocessors/preparation_metadata.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/preprocessors/preparation_metadata.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/preprocessors/scaler.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/preprocessors/scaler.pkl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/training_metadata.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/training_metadata.pkl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/training_scores.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/training_scores.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/HistGradientBoosting_results.png" beforeDir="false" afterPath="$PROJECT_DIR$/results/HistGradientBoosting_results.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/model_comparison.png" beforeDir="false" afterPath="$PROJECT_DIR$/results/model_comparison.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/test_results.csv" beforeDir="false" afterPath="$PROJECT_DIR$/results/test_results.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/validation_results.csv" beforeDir="false" afterPath="$PROJECT_DIR$/results/validation_results.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,10 +42,11 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="38TLT0KThZD39iCwGNYBy8vcCC3" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -48,7 +65,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "git-widget-placeholder": "final",
-    "last_opened_file_path": "D:/DUT_AI/DataSience Test/modeling",
+    "last_opened_file_path": "D:/DUT_AI/DataSience Test",
     "settings.editor.selected.configurable": "preferences.fileTypes"
   }
 }]]></component>

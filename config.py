@@ -52,7 +52,26 @@ TARGET_COLUMN = 'Value_Numeric'  # Cột target
 
 # Models để train
 MODELS = {
-    'regression': ['LinearRegression', 'Ridge']
+
+    'regression': [
+        'LinearRegression',
+        'Ridge',
+        'KNN',
+        'HistGradientBoosting',
+        'CustomRegressionTree_MSE',   # Custom Decision Tree (MSE criterion) - TỰ LÀM
+        'CustomRegressionTree_MAE',   # Custom Decision Tree (MAE criterion) - TỰ LÀM
+    ],
+    'classification': [
+        'CustomDecisionTree_IG',      # Custom Decision Tree (Information Gain) - TỰ LÀM
+        'CustomDecisionTree_Gini',    # Custom Decision Tree (Gini Impurity) - TỰ LÀM
+    ]
+}
+
+# KNN
+KNN_CONFIG = {
+    'n_neighbors': 30,  # Tăng để giảm overfitting
+    'weights': 'uniform',  # Đổi từ 'distance' sang 'uniform' để giảm overfitting
+    'metric': 'euclidean'
 }
 
 # ==================== EVALUATION ====================

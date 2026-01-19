@@ -18,11 +18,18 @@ from sklearn.ensemble import (
     GradientBoostingClassifier
 )
 from sklearn.svm import SVR, SVC
+from sklearn.neighbors import KNeighborsRegressor, KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 from typing import Dict, List, Optional, Any
 import pickle
 import warnings
 warnings.filterwarnings('ignore')
+
+# Import config để lấy KNN_CONFIG
+try:
+    import config as cfg
+except ImportError:
+    cfg = None
 
 # Import custom Decision Tree models
 try:
@@ -73,10 +80,23 @@ class ModelTrainer:
     def _initialize_models(self):
         """Khởi tạo các models"""
         if self.task_type == 'regression':
+            # Lấy KNN config từ config.py nếu có sẵn, nếu không dùng mặc định
+            knn_config = {
+                'n_neighbors': 30,
+                'weights': 'uniform',
+                'metric': 'euclidean'
+            }
+            if cfg:
+                knn_config = cfg.KNN_CONFIG
+            
             self.models = {
                 'LinearRegression': LinearRegression(),
                 'Ridge': Ridge(random_state=self.random_state),
-
+                'KNN': KNeighborsRegressor(
+                    n_neighbors=knn_config['n_neighbors'],
+                    weights=knn_config['weights'],
+                    metric=knn_config['metric']
+                ),
                 'HistGradientBoosting': HistGradientBoostingModel(random_state=self.random_state),
 
                 'DecisionTreeRegressor': DecisionTreeRegressor(
