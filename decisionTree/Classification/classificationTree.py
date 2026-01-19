@@ -148,62 +148,114 @@ class DecisionTree:
         correct = sum([1 for pred, act in zip(predictions, actual) if pred == act])
         return correct / len(actual)
 
-
 # === DEMO ===
 if __name__ == "__main__":
-    # Tạo dữ liệu mẫu
-    data = {
-        'Weather': ['Sunny', 'Sunny', 'Overcast', 'Rainy', 'Rainy', 'Rainy', 'Overcast', 'Sunny', 'Sunny', 'Rainy'],
-        'Temp':    ['Hot', 'Hot', 'Hot', 'Mild', 'Cool', 'Cool', 'Cool', 'Mild', 'Cool', 'Mild'],
-        'Play':    ['No', 'No', 'Yes', 'Yes', 'Yes', 'No', 'Yes', 'No', 'Yes', 'Yes']
-    }
-    df = pd.DataFrame(data)
+    # Đọc dữ liệu FIFA
+    import os
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_path = os.path.join(current_dir, '../../data/sofifa_players.csv')
+    df = pd.read_csv(csv_path)
+    
+    # Chọn các features và target
+    selected_cols = ['Age', 'Overall', 'Potential', 'Wage_Numeric', 'Value_Numeric']
+    df = df[selected_cols].dropna()
+    
+    # Loại bỏ các hàng có Value_Numeric = 0
+    df = df[df['Value_Numeric'] > 0]
+    
+    # Discretize numeric features thành categorical bins
+    def discretize_column(col, bins, labels):
+        return pd.cut(col, bins=bins, labels=labels, include_lowest=True)
+    
+    df_binned = df.copy()
+    df_binned['Age_Cat'] = discretize_column(df['Age'], bins=[0, 22, 28, 35, 50], labels=['Young', 'Prime', 'Experienced', 'Veteran'])
+    df_binned['Potential_Cat'] = discretize_column(df['Potential'], bins=[0, 75, 85, 90, 100], labels=['Low', 'Medium', 'High', 'Elite'])
+    df_binned['Wage_Cat'] = discretize_column(df['Wage_Numeric'], bins=[-1, 30000, 80000, 150000, 1000000], labels=['Low', 'Medium', 'High', 'Elite'])
+    
+    # Target: Phân loại cầu thủ theo mức đánh giá Overall (hợp lý hơn Preferred_Foot)
+    df_binned['Overall_Category'] = discretize_column(df['Overall'], bins=[0, 70, 80, 85, 100], labels=['Low', 'Medium', 'High', 'Elite'])
+    
+    # Balanced sampling: 100 samples per Overall_Category
+    samples_per_class = 100
+    balanced_dfs = []
+    for category in ['Low', 'Medium', 'High', 'Elite']:
+        category_df = df_binned[df_binned['Overall_Category'] == category]
+        n_samples = min(samples_per_class, len(category_df))
+        if n_samples > 0:
+            sampled = category_df.sample(n=n_samples, random_state=42)
+            balanced_dfs.append(sampled)
+            print(f"Sampled {n_samples} from Overall_Category={category}")
+    
+    df_binned = pd.concat(balanced_dfs, ignore_index=True)
+    
+    target_column = 'Overall_Category'
+    features = ['Age_Cat', 'Potential_Cat', 'Wage_Cat']
+    
+    train_df = df_binned[features + [target_column]].copy()
     
     print("=" * 60)
-    print("DEMO CÂY QUYẾT ĐỊNH")
+    print("DEMO CÂY QUYẾT ĐỊNH (CLASSIFICATION TREE)")
+    print("Dự đoán mức đánh giá cầu thủ (Overall_Category)")
     print("=" * 60)
-    print("\nDữ liệu:")
-    print(df)
+    print(f"\nSố lượng mẫu: {len(train_df)}")
+    print(f"Features: {features}")
+    print(f"Target: {target_column}")
+    print(f"\nPhân phối target:")
+    print(train_df[target_column].value_counts().sort_index())
+    print(f"\nBaseline accuracy (đoán class phổ biến nhất): {train_df[target_column].value_counts().max() / len(train_df) * 100:.1f}%")
+    print("\nDữ liệu mẫu:")
+    print(train_df.head(10).to_string())
     
     # Test với Information Gain
     print("\n" + "=" * 60)
     print("1. CÂY QUYẾT ĐỊNH VỚI INFORMATION GAIN")
     print("=" * 60)
-    tree_ig = DecisionTree(criterion='information_gain', max_depth=3)
-    tree_ig.fit(df, 'Play')
+    tree_ig = DecisionTree(criterion='information_gain', max_depth=4)
+    tree_ig.fit(train_df, target_column)
     print("\nCấu trúc cây:")
     tree_ig.print_tree()
     
-    accuracy = tree_ig.score(df, 'Play')
-    print(f"\nĐộ chính xác trên tập huấn luyện: {accuracy * 100:.2f}%")
+    accuracy_ig = tree_ig.score(train_df, target_column)
+    print(f"\n📊 Kết quả Classification với Information Gain:")
+    print(f"  Accuracy: {accuracy_ig * 100:.2f}%")
     
     # Test với Gini
     print("\n" + "=" * 60)
     print("2. CÂY QUYẾT ĐỊNH VỚI GINI IMPURITY")
     print("=" * 60)
-    tree_gini = DecisionTree(criterion='gini', max_depth=3)
-    tree_gini.fit(df, 'Play')
+    tree_gini = DecisionTree(criterion='gini', max_depth=4)
+    tree_gini.fit(train_df, target_column)
     print("\nCấu trúc cây:")
     tree_gini.print_tree()
     
-    accuracy = tree_gini.score(df, 'Play')
-    print(f"\nĐộ chính xác trên tập huấn luyện: {accuracy * 100:.2f}%")
+    accuracy_gini = tree_gini.score(train_df, target_column)
+    print(f"\n📊 Kết quả Classification với Gini Impurity:")
+    print(f"  Accuracy: {accuracy_gini * 100:.2f}%")
     
     # Test dự đoán
     print("\n" + "=" * 60)
     print("3. DỰ ĐOÁN MẪU MỚI")
     print("=" * 60)
     test_data = pd.DataFrame({
-        'Weather': ['Sunny', 'Overcast', 'Rainy'],
-        'Temp': ['Cool', 'Hot', 'Mild']
+        'Age_Cat': ['Young', 'Prime', 'Experienced', 'Veteran'],
+        'Potential_Cat': ['Elite', 'High', 'Medium', 'Low'],
+        'Wage_Cat': ['Elite', 'High', 'Medium', 'Low']
     })
-    print("\nDữ liệu test:")
-    print(test_data)
+    print("\nDữ liệu test (4 cầu thủ mẫu):")
+    print(test_data.to_string())
     
     predictions_ig = tree_ig.predict(test_data)
     predictions_gini = tree_gini.predict(test_data)
     
-    print("\nKết quả dự đoán:")
+    print("\nKết quả dự đoán mức Overall:")
     print(f"Information Gain: {predictions_ig}")
     print(f"Gini Impurity:    {predictions_gini}")
+    
+    print("\n" + "=" * 60)
+    print("TỔNG KẾT")
     print("=" * 60)
+    print(f"Information Gain Accuracy: {accuracy_ig * 100:.2f}%")
+    print(f"Gini Impurity Accuracy:    {accuracy_gini * 100:.2f}%")
+    print("=" * 60)
+
+
