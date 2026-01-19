@@ -48,11 +48,11 @@ IMBALANCED_METHOD = 'smote'  # 'smote', 'adasyn', 'random_oversample', 'random_u
 
 # ==================== MODEL TRAINING ====================
 TASK_TYPE = 'regression'  # 'regression' hoặc 'classification'
-TARGET_COLUMN = 'Overall'  # Cột target
+TARGET_COLUMN = 'Value_Numeric'  # Cột target
 
 # Models để train
 MODELS = {
-    'regression': ['LinearRegression', 'Ridge']
+    'regression': ['LinearRegression', 'Ridge', 'HistGradientBoosting']
 }
 
 # ==================== EVALUATION ====================

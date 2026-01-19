@@ -28,6 +28,9 @@ try:
 except ImportError:
     XGBOOST_AVAILABLE = False
 
+# Import custom model
+from modeling.hist_gradient_boosting import HistGradientBoostingModel
+
 
 class ModelTrainer:
     """Class để train nhiều models"""
@@ -56,6 +59,7 @@ class ModelTrainer:
             self.models = {
                 'LinearRegression': LinearRegression(),
                 'Ridge': Ridge(random_state=self.random_state),
+                'HistGradientBoosting': HistGradientBoostingModel(random_state=self.random_state),
             }
         else:  # classification
             self.models = {
