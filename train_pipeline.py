@@ -48,7 +48,7 @@ def train_pipeline(use_prepared_data=True):
         
         # Check nếu data đã được chuẩn bị
         if not os.path.exists('data/processed/X_train.csv'):
-            print("⚠️  Processed data không tồn tại!")
+            print("[WARNING] Processed data does not exist!")
             print("Chạy data_preparation_pipeline.py trước hoặc set use_prepared_data=False")
             print("\nĐang chạy data preparation pipeline...")
             
@@ -67,7 +67,7 @@ def train_pipeline(use_prepared_data=True):
             else:
                 X_val, y_val = None, None
             
-            print(f"✓ Loaded processed data")
+            print(f"[OK] Loaded processed data")
             print(f"  - Train: {X_train.shape}")
             print(f"  - Test: {X_test.shape}")
             if X_val is not None:
@@ -190,8 +190,8 @@ def train_pipeline(use_prepared_data=True):
     print(f"  - Trained models: {config.MODEL_SAVE_PATH}")
     print(f"  - Results: {config.RESULTS_PATH}")
     
-    print("\n✓ Training pipeline hoàn thành!")
-    print(f"✓ Dùng inference_pipeline.py để test trên dữ liệu mới")
+    print("\n[OK] Training pipeline completed!")
+    print(f"[OK] Use inference_pipeline.py to test on new data")
     
     return metadata
 

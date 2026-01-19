@@ -52,7 +52,14 @@ TARGET_COLUMN = 'Overall'  # Cột target
 
 # Models để train
 MODELS = {
-    'regression': ['LinearRegression', 'Ridge']
+    'regression': ['LinearRegression', 'Ridge', 'KNN']
+}
+
+# KNN
+KNN_CONFIG = {
+    'n_neighbors': 10,
+    'weights': 'distance',
+    'metric': 'euclidean'
 }
 
 # ==================== EVALUATION ====================

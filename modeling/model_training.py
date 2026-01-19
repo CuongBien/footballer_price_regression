@@ -16,10 +16,12 @@ from sklearn.ensemble import (
     GradientBoostingClassifier
 )
 from sklearn.svm import SVR, SVC
+from sklearn.neighbors import KNeighborsRegressor, KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 from typing import Dict, List, Optional, Any
 import pickle
 import warnings
+import config
 warnings.filterwarnings('ignore')
 
 try:
@@ -56,6 +58,12 @@ class ModelTrainer:
             self.models = {
                 'LinearRegression': LinearRegression(),
                 'Ridge': Ridge(random_state=self.random_state),
+                'KNN': KNeighborsRegressor(
+                    n_neighbors=config.KNN_CONFIG['n_neighbors'],
+                    weights=config.KNN_CONFIG['weights'],
+                    metric=config.KNN_CONFIG['metric'],
+                    n_jobs=-1
+                ),
             }
         else:  # classification
             self.models = {

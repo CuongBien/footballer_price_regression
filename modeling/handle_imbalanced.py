@@ -17,7 +17,7 @@ try:
     IMBLEARN_AVAILABLE = True
 except ImportError:
     IMBLEARN_AVAILABLE = False
-    print("⚠️  imbalanced-learn không được cài đặt. Cài đặt: pip install imbalanced-learn")
+    print("[WARNING] imbalanced-learn not installed. Install: pip install imbalanced-learn")
 
 
 class ImbalanceHandler:

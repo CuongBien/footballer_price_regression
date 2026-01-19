@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bb415ad2-ca4e-41b4-9f84-fa6df1d61a4b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/modeling/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modeling/model_training.py" beforeDir="false" afterPath="$PROJECT_DIR$/modeling/model_training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/preprocessors/preparation_metadata.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/preprocessors/preparation_metadata.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/training_metadata.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/training_metadata.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/training_scores.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/models/training_scores.pkl" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="38TLT0KThZD39iCwGNYBy8vcCC3" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.KNN.executor": "Run",
+    "Python.KNN_model.executor": "Run",
+    "Python.config.executor": "Run",
+    "Python.main_pipeline.executor": "Run",
+    "Python.model_evaluation.executor": "Run",
+    "Python.models.executor": "Run",
+    "Python.train_KNN.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "git-widget-placeholder": "final",
+    "last_opened_file_path": "D:/DUT_AI/DataSience Test/modeling",
+    "settings.editor.selected.configurable": "preferences.fileTypes"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\DUT_AI\DataSience Test\modeling" />
+      <recent name="D:\DUT_AI\DataSience Test\models" />
+      <recent name="D:\DUT_AI\DataSience Test\KNN" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\DUT_AI\DataSience Test\modeling" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="KNN" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="DataSience Test" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/KNN" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="D:\DUT_AI\DataSience Test\modeling\KNN.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-1bde30d8e611-7b97d883f26b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.25557.130" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bb415ad2-ca4e-41b4-9f84-fa6df1d61a4b" name="Changes" comment="" />
+      <created>1768818617481</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1768818617481</updated>
+    </task>
+    <servers />
+  </component>
+</project>
