@@ -1,0 +1,87 @@
+{
+    "timestamp": "20260120_173403",
+    "pipeline_info": {
+        "task_type": "regression",
+        "target_column": "Value_Numeric",
+        "random_state": 42
+    },
+    "data_preparation": {
+        "raw_data_path": "sofifa_players.csv",
+        "missing_threshold": 0.5,
+        "scaling_method": null,
+        "encoding_method": "onehot"
+    },
+    "training_results": {
+        "train_samples": 4070,
+        "val_samples": 582,
+        "test_samples": 1164,
+        "n_features": 65,
+        "models_trained": [
+            "CustomRegressionTree_MSE",
+            "CustomRegressionTree_MAE",
+            "DecisionTreeRegressor_Sklearn",
+            "KNN",
+            "KNN_Custom",
+            "HistGradientBoosting_Custom",
+            "HistGradientBoosting_Sklearn"
+        ],
+        "best_model": "KNN_Custom",
+        "best_score": 8034633.067084166
+    },
+    "test_results": {
+        "model": {
+            "HistGradientBoosting_Custom": "HistGradientBoosting_Custom",
+            "CustomRegressionTree_MAE": "CustomRegressionTree_MAE",
+            "CustomRegressionTree_MSE": "CustomRegressionTree_MSE",
+            "HistGradientBoosting_Sklearn": "HistGradientBoosting_Sklearn",
+            "DecisionTreeRegressor_Sklearn": "DecisionTreeRegressor_Sklearn",
+            "KNN": "KNN",
+            "KNN_Custom": "KNN_Custom"
+        },
+        "MAE": {
+            "HistGradientBoosting_Custom": 404932.30129777093,
+            "CustomRegressionTree_MAE": 647280.9278350516,
+            "CustomRegressionTree_MSE": 674243.7455681013,
+            "HistGradientBoosting_Sklearn": 545941.925616123,
+            "DecisionTreeRegressor_Sklearn": 1165263.5617681784,
+            "KNN": 2377491.237113402,
+            "KNN_Custom": 3221957.0160366553
+        },
+        "MSE": {
+            "HistGradientBoosting_Custom": 1550619919594.5525,
+            "CustomRegressionTree_MAE": 4826744394329.896,
+            "CustomRegressionTree_MSE": 4861701659292.533,
+            "HistGradientBoosting_Sklearn": 5120045175191.76,
+            "DecisionTreeRegressor_Sklearn": 18203542693392.613,
+            "KNN": 55801959834726.99,
+            "KNN_Custom": 102248428903742.84
+        },
+        "RMSE": {
+            "HistGradientBoosting_Custom": 1245238.9006108637,
+            "CustomRegressionTree_MAE": 2196985.2967941994,
+            "CustomRegressionTree_MSE": 2204926.6788926413,
+            "HistGradientBoosting_Sklearn": 2262751.6821763185,
+            "DecisionTreeRegressor_Sklearn": 4266560.991406617,
+            "KNN": 7470070.939069253,
+            "KNN_Custom": 10111796.522069797
+        },
+        "R2": {
+            "HistGradientBoosting_Custom": 0.9916404066359397,
+            "CustomRegressionTree_MAE": 0.9739783941254889,
+            "CustomRegressionTree_MSE": 0.9737899349702088,
+            "HistGradientBoosting_Sklearn": 0.9723971715251707,
+            "DecisionTreeRegressor_Sklearn": 0.9018623372632393,
+            "KNN": 0.6991643875838278,
+            "KNN_Custom": 0.4487654408742431
+        },
+        "MAPE": {
+            "HistGradientBoosting_Custom": 1.524301965845477e+20,
+            "CustomRegressionTree_MAE": 1.443163798117865e+20,
+            "CustomRegressionTree_MSE": 1.7140562491945507e+20,
+            "HistGradientBoosting_Sklearn": 1.2739097219540807e+20,
+            "DecisionTreeRegressor_Sklearn": 2.7388841732648416e+20,
+            "KNN": 1.770598189582523e+20,
+            "KNN_Custom": 1.924702031471089e+20
+        }
+    }
+}

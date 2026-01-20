@@ -1,0 +1,43 @@
+================================================================================
+                    ML PIPELINE REPORT
+================================================================================
+
+Timestamp: 20260120_164704
+Task Type: REGRESSION
+Target Column: Value_Numeric
+
+----------------------------------------
+DATA SUMMARY
+----------------------------------------
+Train samples: 4,070
+Validation samples: 582
+Test samples: 1,164
+Number of features: 68
+
+----------------------------------------
+MODELS TRAINED
+----------------------------------------
+  • CustomRegressionTree_MSE
+  • CustomRegressionTree_MAE
+  • DecisionTreeRegressor_Sklearn
+  • KNN
+  • KNN_Custom
+  • HistGradientBoosting_Custom
+  • HistGradientBoosting_Sklearn
+
+----------------------------------------
+BEST MODEL
+----------------------------------------
+Model: KNN_Custom
+Score: 7420977.7080
+
+----------------------------------------
+OUTPUT LOCATIONS
+----------------------------------------
+Trained models: models/
+Results & reports: results/
+Processed data: data/processed/
+
+================================================================================
+                         END OF REPORT
+================================================================================

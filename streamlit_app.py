@@ -10,6 +10,11 @@ import pickle
 import os
 import plotly.graph_objects as go
 import plotly.express as px
+
+# Đảm bảo working directory đúng
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+os.chdir(SCRIPT_DIR)
+
 from inference_pipeline import ModelInference
 import warnings
 warnings.filterwarnings('ignore')
@@ -64,13 +69,22 @@ st.markdown("""
 def load_models():
     """Load tất cả models và metadata"""
     models = {}
-    model_names = ['CustomRegressionTree_MSE', 'CustomRegressionTree_MAE', 
-                   'CustomRandomForestRegressor', 'HistGradientBoosting', 'KNN']
+    model_names = [
+        'CustomRegressionTree_MSE', 
+        'CustomRegressionTree_MAE', 
+        'DecisionTreeRegressor_Sklearn',
+        'HistGradientBoosting_Custom', 
+        'HistGradientBoosting_Sklearn',
+        'KNN_Custom'
+    ]
     
     for model_name in model_names:
         model_path = f'models/{model_name}.pkl'
         if os.path.exists(model_path):
             try:
+                print("=" * 70)
+                print("LOADING MODEL:", model_name)
+                print("=" * 70)
                 with open(model_path, 'rb') as f:
                     models[model_name] = pickle.load(f)
             except Exception as e:
@@ -420,10 +434,8 @@ def manual_input_page():
                     'GK_Kicking': [50 if 'GK' in positions else 10],
                     'GK_Positioning': [50 if 'GK' in positions else 10],
                     'GK_Reflexes': [50 if 'GK' in positions else 10],
-                    # Các fields khác (sẽ bị drop trong preprocessing)
-                    'Value_Raw': ['€10M'],
-                    'Wage_Raw': ['€100K'],
-                    'Wage_Numeric': [100000],  # Thêm Wage_Numeric
+                    # NOTE: Value_Raw, Wage_Raw, Wage_Numeric đã bị loại bỏ 
+                    # khỏi features để tránh data leakage
                 })
                 
                 # Predict với các models đã chọn (selected_models đã được define ở đầu page)

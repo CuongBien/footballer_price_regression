@@ -178,9 +178,9 @@ class ModelTrainer:
                 self.models['CustomRegressionTree_MAE'] = CustomRegressionTree(
                     criterion='mae', 
                     max_depth=None,           # Không giới hạn depth
-                    min_samples_split=10,     # Giữ nguyên
-                    min_samples_leaf=5,       # Giữ nguyên
-                    min_impurity_decrease=1e-7
+                    min_samples_split=5,      # Giảm để cho phép nhiều splits hơn
+                    min_samples_leaf=2,       # Giảm để có nhiều leaf nodes hơn
+                    min_impurity_decrease=1e-9  # Giảm threshold cho MAE
                 )
         else:  # classification
             self.models = {

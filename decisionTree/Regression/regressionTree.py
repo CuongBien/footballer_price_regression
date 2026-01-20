@@ -68,14 +68,15 @@ class RegressionTree:
             return 0.0
         if self.criterion == 'mse':
             return np.var(y) * len(y)
-        else:  # mae
-            return np.sum(np.abs(y - np.median(y)))
+        else:  # mae - normalize by n to be consistent with MSE
+            return np.mean(np.abs(y - np.median(y))) * len(y)
     
     def _compute_impurity_reduction(self, y, left_mask):
         """Tính reduction khi split"""
         right_mask = ~left_mask
         n_left = np.sum(left_mask)
         n_right = np.sum(right_mask)
+        n_total = len(y)
         
         if n_left < self.min_samples_leaf or n_right < self.min_samples_leaf:
             return -np.inf
@@ -84,7 +85,9 @@ class RegressionTree:
         left_impurity = self._compute_impurity(y[left_mask])
         right_impurity = self._compute_impurity(y[right_mask])
         
-        return parent_impurity - left_impurity - right_impurity
+        # Weighted impurity reduction
+        weighted_child_impurity = (n_left / n_total) * left_impurity + (n_right / n_total) * right_impurity
+        return parent_impurity - weighted_child_impurity
     
     def _get_n_features_to_sample(self, n_features):
         """Xác định số features để sample"""

@@ -16,7 +16,8 @@ HIGH_CORRELATION_THRESHOLD = 0.95  # Phát hiện multicollinearity
 DUPLICATE_CHECK = True
 
 # Các cột cần loại bỏ (không cần cho ML)
-COLUMNS_TO_DROP = ['Player_URL', 'Name', 'Team', 'Nationality']
+# Value_Raw, Wage_Raw, Wage_Numeric gây DATA LEAKAGE vì chúng encode target variable
+COLUMNS_TO_DROP = ['Player_URL', 'Name', 'Team', 'Nationality', 'Value_Raw', 'Wage_Raw', 'Wage_Numeric']
 
 # ==================== IMPUTATION ====================
 NUMERIC_IMPUTATION_STRATEGY = 'median'  # 'mean', 'median', 'mode', 'knn'
