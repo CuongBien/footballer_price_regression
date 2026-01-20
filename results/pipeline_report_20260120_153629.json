@@ -1,0 +1,59 @@
+{
+    "timestamp": "20260120_153629",
+    "pipeline_info": {
+        "task_type": "regression",
+        "target_column": "Value_Numeric",
+        "random_state": 42
+    },
+    "data_preparation": {
+        "raw_data_path": "sofifa_players.csv",
+        "missing_threshold": 0.5,
+        "scaling_method": null,
+        "encoding_method": "onehot"
+    },
+    "training_results": {
+        "train_samples": 4070,
+        "val_samples": 582,
+        "test_samples": 1164,
+        "n_features": 68,
+        "models_trained": [
+            "CustomRegressionTree_MSE",
+            "CustomRegressionTree_MAE",
+            "DecisionTreeRegressor_Sklearn"
+        ],
+        "best_model": "DecisionTreeRegressor_Sklearn",
+        "best_score": 0.9507480635982796
+    },
+    "test_results": {
+        "model": {
+            "DecisionTreeRegressor_Sklearn": "DecisionTreeRegressor_Sklearn",
+            "CustomRegressionTree_MSE": "CustomRegressionTree_MSE",
+            "CustomRegressionTree_MAE": "CustomRegressionTree_MAE"
+        },
+        "MAE": {
+            "DecisionTreeRegressor_Sklearn": 897762.2458981113,
+            "CustomRegressionTree_MSE": 646875.0170457645,
+            "CustomRegressionTree_MAE": 753616.8384879725
+        },
+        "MSE": {
+            "DecisionTreeRegressor_Sklearn": 17137785232951.457,
+            "CustomRegressionTree_MSE": 21337989429038.28,
+            "CustomRegressionTree_MAE": 22727402319587.63
+        },
+        "RMSE": {
+            "DecisionTreeRegressor_Sklearn": 4139780.819433736,
+            "CustomRegressionTree_MSE": 4619306.163163282,
+            "CustomRegressionTree_MAE": 4767326.537965239
+        },
+        "R2": {
+            "DecisionTreeRegressor_Sklearn": 0.9076079741413797,
+            "CustomRegressionTree_MSE": 0.8849641278437734,
+            "CustomRegressionTree_MAE": 0.8774736225090985
+        },
+        "MAPE": {
+            "DecisionTreeRegressor_Sklearn": 1.7939710671779925e+20,
+            "CustomRegressionTree_MSE": 9.944620090285955e+19,
+            "CustomRegressionTree_MAE": 7.931597281881027e+19
+        }
+    }
+}

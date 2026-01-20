@@ -99,6 +99,15 @@ class ModelInference:
                 self.preprocessors['ml_encoder'] = pickle.load(f)
             print(f"✓ Loaded multi-label encoder")
         
+        # Load log transformer (if exists)
+        log_transformer_path = os.path.join(preprocessor_path, 'log_transformer.pkl')
+        if os.path.exists(log_transformer_path):
+            from preprocessing.log_transform import LogTargetTransformer
+            self.preprocessors['log_transformer'] = LogTargetTransformer.load(log_transformer_path)
+            print(f"✓ Loaded log transformer")
+        else:
+            self.preprocessors['log_transformer'] = None
+        
         # Load feature names
         feature_names_path = os.path.join(preprocessor_path, 'feature_names.pkl')
         if os.path.exists(feature_names_path):
@@ -211,6 +220,11 @@ class ModelInference:
         # Predict
         print(f"\nPredicting với {self.model_name}...")
         predictions = self.model.predict(df_processed)
+        
+        # Inverse transform if log transformer exists
+        if self.preprocessors.get('log_transformer') is not None:
+            predictions = self.preprocessors['log_transformer'].inverse_transform(predictions)
+            print("✓ Applied inverse log transform")
         
         print(f"✓ Generated {len(predictions)} predictions")
         

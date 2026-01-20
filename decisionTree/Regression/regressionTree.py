@@ -44,12 +44,13 @@ class RegressionTree:
     """
     
     def __init__(self, criterion='mse', max_depth=None, min_samples_split=2, 
-                 min_samples_leaf=1, max_features=None):
+                 min_samples_leaf=1, max_features=None, min_impurity_decrease=0.0):
         self.criterion = criterion
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
         self.min_samples_leaf = min_samples_leaf
         self.max_features = max_features
+        self.min_impurity_decrease = min_impurity_decrease
         self.root = None
         self.n_features_ = None
         self.feature_names_ = None
@@ -141,24 +142,28 @@ class RegressionTree:
         """Xây dựng cây đệ quy"""
         n_samples = len(y)
         
-        # Stopping conditions
+        # Stopping conditions - FIXED: Không check 2*min_samples_leaf
         if (self.max_depth is not None and depth >= self.max_depth) or \
            n_samples < self.min_samples_split or \
-           n_samples < 2 * self.min_samples_leaf or \
            np.all(y == y[0]):
             return Node(value=self._compute_leaf_value(y))
         
         # Find best split
         best_feature, best_threshold, best_reduction = self._find_best_split(X, y)
         
-        if best_feature is None or best_reduction <= 0:
+        # Thêm điều kiện min_impurity_decrease giống sklearn
+        if best_feature is None or best_reduction <= self.min_impurity_decrease:
             return Node(value=self._compute_leaf_value(y))
         
         # Split data
         left_mask = X[:, best_feature] <= best_threshold
         right_mask = ~left_mask
         
-        if np.sum(left_mask) < self.min_samples_leaf or np.sum(right_mask) < self.min_samples_leaf:
+        # Check min_samples_leaf sau khi split (đã check trong _compute_impurity_reduction)
+        n_left = np.sum(left_mask)
+        n_right = np.sum(right_mask)
+        
+        if n_left < self.min_samples_leaf or n_right < self.min_samples_leaf:
             return Node(value=self._compute_leaf_value(y))
         
         # Build children recursively

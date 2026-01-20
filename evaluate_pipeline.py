@@ -38,6 +38,15 @@ class ModelEvaluatorAdvanced:
         print("LOADING ALL MODELS")
         print("="*70)
         
+        # Check for log transformer
+        log_transformer_path = os.path.join(self.model_path, 'preprocessors', 'log_transformer.pkl')
+        if os.path.exists(log_transformer_path):
+            from preprocessing.log_transform import LogTargetTransformer
+            self.log_transformer = LogTargetTransformer.load(log_transformer_path)
+            print("✓ Loaded log transformer")
+        else:
+            self.log_transformer = None
+        
         for filename in os.listdir(self.model_path):
             if filename.endswith('.pkl') and filename not in ['training_metadata.pkl', 'training_scores.pkl']:
                 model_name = filename.replace('.pkl', '')
@@ -85,6 +94,10 @@ class ModelEvaluatorAdvanced:
             
             try:
                 y_pred = model.predict(X_test)
+                
+                # Inverse transform if log transformer exists
+                if self.log_transformer is not None and task_type == 'regression':
+                    y_pred = self.log_transformer.inverse_transform(y_pred)
                 
                 if task_type == 'regression':
                     metrics = {

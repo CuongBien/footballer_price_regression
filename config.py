@@ -49,17 +49,19 @@ IMBALANCED_METHOD = 'smote'  # 'smote', 'adasyn', 'random_oversample', 'random_u
 # ==================== MODEL TRAINING ====================
 TASK_TYPE = 'regression'  # 'regression' hoặc 'classification'
 TARGET_COLUMN = 'Value_Numeric'  # Cột target
+USE_LOG_TRANSFORM = False  # Tắt log transform để test ảnh hưởng
 
 # Models để train
 MODELS = {
 
     'regression': [
-        'LinearRegression',
-        'Ridge',
-        'KNN',
-        'HistGradientBoosting',
-        'CustomRegressionTree_MSE',   # Custom Decision Tree (MSE criterion) - TỰ LÀM
-        'CustomRegressionTree_MAE',   # Custom Decision Tree (MAE criterion) - TỰ LÀM
+        'CustomRegressionTree_MSE',         # Custom Regression Tree (MSE) - TỰ LÀM
+        'CustomRegressionTree_MAE',         # Custom Regression Tree (MAE) - TỰ LÀM
+        'DecisionTreeRegressor_Sklearn',    # Sklearn DecisionTreeRegressor
+        'KNN',                              # KNN Regressor (sklearn)
+        'KNN_Custom',                       # KNN Custom (nếu có)
+        'HistGradientBoosting_Custom',      # Custom HistGradientBoosting - TỰ LÀM
+        'HistGradientBoosting_Sklearn',     # Sklearn HistGradientBoosting
     ],
     'classification': [
         'CustomDecisionTree_IG',      # Custom Decision Tree (Information Gain) - TỰ LÀM

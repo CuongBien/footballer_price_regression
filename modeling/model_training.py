@@ -15,7 +15,9 @@ from sklearn.ensemble import (
     RandomForestRegressor, 
     RandomForestClassifier,
     GradientBoostingRegressor,
-    GradientBoostingClassifier
+    GradientBoostingClassifier,
+    HistGradientBoostingRegressor,
+    HistGradientBoostingClassifier
 )
 from sklearn.svm import SVR, SVC
 from sklearn.neighbors import KNeighborsRegressor, KNeighborsClassifier
@@ -52,8 +54,9 @@ try:
 except ImportError:
     XGBOOST_AVAILABLE = False
 
-# Import custom model
-from modeling.hist_gradient_boosting import HistGradientBoostingModel
+# Import custom models (path đã được thêm ở trên)
+from hist_gradient_boosting_model import HistGradientBoostingModel
+from random_forest_model import RandomForestRegressor as CustomRandomForestRegressor
 
 
 class ModelTrainer:
@@ -89,31 +92,95 @@ class ModelTrainer:
             if cfg:
                 knn_config = cfg.KNN_CONFIG
             
+            from KNN.KNN import KNNModel
+            from sklearn.neighbors import KNeighborsRegressor
+            from sklearn.pipeline import make_pipeline
+            from sklearn.preprocessing import StandardScaler
             self.models = {
                 'LinearRegression': LinearRegression(),
                 'Ridge': Ridge(random_state=self.random_state),
+                
+                # KNN Variants để so sánh
                 'KNN': KNeighborsRegressor(
                     n_neighbors=knn_config['n_neighbors'],
                     weights=knn_config['weights'],
                     metric=knn_config['metric']
                 ),
-                'HistGradientBoosting': HistGradientBoostingModel(random_state=self.random_state),
-
-                'DecisionTreeRegressor': DecisionTreeRegressor(
-                    max_depth=10, min_samples_split=5, random_state=self.random_state
+                'KNN_Custom': KNNModel(
+                    make_pipeline(StandardScaler(), KNeighborsRegressor(
+                        n_neighbors=knn_config['n_neighbors'],
+                        weights=knn_config['weights'],
+                        metric=knn_config['metric']
+                    ))
                 ),
+                'KNN_Distance': KNeighborsRegressor(
+                    n_neighbors=30,
+                    weights='distance',  # Weighted by distance
+                    metric='euclidean'
+                ),
+                'KNN_K5': KNeighborsRegressor(
+                    n_neighbors=5,
+                    weights='uniform',
+                    metric='euclidean'
+                ),
+                'KNN_K10': KNeighborsRegressor(
+                    n_neighbors=10,
+                    weights='uniform',
+                    metric='euclidean'
+                ),
+                
+                # Decision Tree comparison - balanced regularization
+                'DecisionTreeRegressor_Sklearn': DecisionTreeRegressor(
+                    max_depth=8,              # Tăng thêm để có capacity
+                    min_samples_split=20,     # Giảm để flexible hơn
+                    min_samples_leaf=10,      # Giảm để có chi tiết hơn
+                    max_features=0.8,         # Sử dụng 80% features
+                    min_impurity_decrease=0.0005,  # Giảm threshold
+                    ccp_alpha=0.01,           # Cost-complexity pruning
+                    random_state=self.random_state
+                ),
+                
+                # HistGradientBoosting comparison
+                'HistGradientBoosting_Custom': HistGradientBoostingModel(random_state=self.random_state),
+                'HistGradientBoosting_Sklearn': HistGradientBoostingRegressor(
+                    learning_rate=0.1,
+                    max_iter=100,
+                    max_depth=10,
+                    min_samples_leaf=20,
+                    l2_regularization=0.0,
+                    random_state=self.random_state
+                ),
+                'CustomRandomForestRegressor': CustomRandomForestRegressor(
+                    n_estimators=100,
+                    criterion='mse',
+                    max_depth=10,
+                    min_samples_split=5,
+                    min_samples_leaf=2,
+                    max_features='sqrt',
+                    random_state=self.random_state,
+                    n_jobs=-1
+                ),
+
                 'RandomForestRegressor': RandomForestRegressor(
                     n_estimators=100, max_depth=10, random_state=self.random_state, n_jobs=-1
                 ),
 
             }
-            # Thêm custom RegressionTree nếu available
+            # Thêm custom Regression Trees nếu available - aggressive config để match sklearn
             if CUSTOM_TREE_AVAILABLE:
                 self.models['CustomRegressionTree_MSE'] = CustomRegressionTree(
-                    criterion='mse', max_depth=10, min_samples_split=5
+                    criterion='mse', 
+                    max_depth=None,           # Không giới hạn depth
+                    min_samples_split=10,     # Giữ nguyên
+                    min_samples_leaf=5,       # Giữ nguyên
+                    min_impurity_decrease=1e-7
                 )
                 self.models['CustomRegressionTree_MAE'] = CustomRegressionTree(
-                    criterion='mae', max_depth=10, min_samples_split=5
+                    criterion='mae', 
+                    max_depth=None,           # Không giới hạn depth
+                    min_samples_split=10,     # Giữ nguyên
+                    min_samples_leaf=5,       # Giữ nguyên
+                    min_impurity_decrease=1e-7
                 )
         else:  # classification
             self.models = {

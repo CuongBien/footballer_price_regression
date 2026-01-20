@@ -83,6 +83,45 @@ def train_pipeline(use_prepared_data=True):
     # ========================================
     # MODEL TRAINING
     # ========================================
+    # LOG TRANSFORM TARGET (if enabled)
+    # ========================================
+    if config.TASK_TYPE == 'regression' and hasattr(config, 'USE_LOG_TRANSFORM') and config.USE_LOG_TRANSFORM:
+        print("\n" + "="*80)
+        print("LOG TRANSFORM TARGET")
+        print("="*80)
+        
+        from preprocessing.log_transform import LogTargetTransformer
+        
+        log_transformer = LogTargetTransformer()
+        
+        print(f"\nOriginal target range:")
+        print(f"  Min:  €{y_train.min():,.0f}")
+        print(f"  Max:  €{y_train.max():,.0f}")
+        print(f"  Mean: €{y_train.mean():,.0f}")
+        
+        # Transform
+        y_train_transformed = log_transformer.fit_transform(y_train)
+        y_val_transformed = log_transformer.transform(y_val) if y_val is not None else None
+        y_test_transformed = log_transformer.transform(y_test)
+        
+        print(f"\nLog-transformed target range:")
+        print(f"  Min:  {y_train_transformed.min():.4f}")
+        print(f"  Max:  {y_train_transformed.max():.4f}")
+        print(f"  Mean: {y_train_transformed.mean():.4f}")
+        
+        # Save transformer
+        log_transformer.save(os.path.join(config.MODEL_SAVE_PATH, 'preprocessors', 'log_transformer.pkl'))
+        print("✓ Saved log transformer")
+        
+        # Use transformed targets for training
+        y_train_for_training = y_train_transformed
+        y_val_for_training = y_val_transformed
+    else:
+        y_train_for_training = y_train
+        y_val_for_training = y_val
+        log_transformer = None
+    
+    # ========================================
     print("\n" + "="*80)
     print("MODEL TRAINING")
     print("="*80)
@@ -95,8 +134,8 @@ def train_pipeline(use_prepared_data=True):
     models_to_train = config.MODELS.get(config.TASK_TYPE, None)
     
     trained_models = trainer.train_all_models(
-        X_train, y_train,
-        X_val, y_val,
+        X_train, y_train_for_training,
+        X_val, y_val_for_training,
         models_to_train=models_to_train
     )
     
