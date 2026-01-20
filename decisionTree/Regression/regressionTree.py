@@ -225,8 +225,86 @@ class RegressionTree:
             node = self.root
         if node.is_leaf():
             return 0
-        return 1 + max(self.get_depth(node.left), self.get_depth(node.right))
+        
+        r2 = 1 - (ss_res / ss_tot)
+        return r2
+    
+    def mse_score(self, data, target_name):
+        """Tính Mean Squared Error"""
+        predictions = self.predict(data)
+        actual = data[target_name].values
+        mse = np.mean((actual - predictions) ** 2)
+        return mse
+    
+    def mae_score(self, data, target_name):
+        """Tính Mean Absolute Error"""
+        predictions = self.predict(data)
+        actual = data[target_name].values
+        mae = np.mean(np.abs(actual - predictions))
+        return mae
 
 
-# Alias for backward compatibility  
-CustomRegressionTree = RegressionTree
+# === DEMO ===
+if __name__ == "__main__":
+    # Tạo dữ liệu mẫu cho regression
+    data = {
+        'Size': ['Small', 'Small', 'Medium', 'Large', 'Large', 'Large', 'Medium', 'Small', 'Medium', 'Large'],
+        'Location': ['City', 'Suburb', 'City', 'City', 'Suburb', 'Suburb', 'Suburb', 'City', 'City', 'Suburb'],
+        'Rooms': [1, 2, 2, 3, 3, 4, 2, 1, 2, 3],
+        'Price': [150, 180, 250, 400, 350, 380, 220, 170, 240, 390]
+    }
+    df = pd.DataFrame(data)
+    
+    print("=" * 60)
+    print("DEMO CÂY HỒI QUY (REGRESSION TREE)")
+    print("=" * 60)
+    print("\nDữ liệu:")
+    print(df)
+    
+    # Test với MSE
+    print("\n" + "=" * 60)
+    print("1. CÂY HỒI QUY VỚI MSE")
+    print("=" * 60)
+    tree_mse = RegressionTree(criterion='mse', max_depth=3)
+    tree_mse.fit(df, 'Price')
+    print("\nCấu trúc cây:")
+    tree_mse.print_tree()
+    
+    r2 = tree_mse.score(df, 'Price')
+    mse = tree_mse.mse_score(df, 'Price')
+    print(f"\nR² score: {r2:.4f}")
+    print(f"MSE: {mse:.2f}")
+    
+    # Test với MAE
+    print("\n" + "=" * 60)
+    print("2. CÂY HỒI QUY VỚI MAE")
+    print("=" * 60)
+    tree_mae = RegressionTree(criterion='mae', max_depth=3)
+    tree_mae.fit(df, 'Price')
+    print("\nCấu trúc cây:")
+    tree_mae.print_tree()
+    
+    r2 = tree_mae.score(df, 'Price')
+    mae = tree_mae.mae_score(df, 'Price')
+    print(f"\nR² score: {r2:.4f}")
+    print(f"MAE: {mae:.2f}")
+    
+    # Test dự đoán
+    print("\n" + "=" * 60)
+    print("3. DỰ ĐOÁN MẪU MỚI")
+    print("=" * 60)
+    test_data = pd.DataFrame({
+        'Size': ['Medium', 'Large', 'Small'],
+        'Location': ['City', 'Suburb', 'City'],
+        'Rooms': [2, 3, 1]
+    })
+    print("\nDữ liệu test:")
+    print(test_data)
+    
+    predictions_mse = tree_mse.predict(test_data)
+    predictions_mae = tree_mae.predict(test_data)
+    
+    print("\nKết quả dự đoán giá:")
+    print(f"MSE criterion: {[f'{p:.2f}' for p in predictions_mse]}")
+    print(f"MAE criterion: {[f'{p:.2f}' for p in predictions_mae]}")
+    print("=" * 60)

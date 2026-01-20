@@ -1,4 +1,8 @@
 /.venv
 pyproject.toml
 poetry.lock
+<<<<<<< HEAD
 
+=======
+__pycache__/
+>>>>>>> 4018760f7aeeee52d8a7fd20c86628809e21f4d1
