@@ -1,0 +1,91 @@
+"""
+Configuration file cho ML Pipeline
+"""
+
+# ==================== FILE PATHS ====================
+RAW_DATA_PATH = 'sofifa_players.csv'
+CLEANED_DATA_PATH = 'data/cleaned_data.csv'
+PROCESSED_DATA_PATH = 'data/processed_data.csv'
+MODEL_SAVE_PATH = 'models/'
+RESULTS_PATH = 'results/'
+
+# ==================== DATA CLEANING ====================
+MISSING_THRESHOLD = 0.5  # Xóa cột có >50% missing
+LOW_VARIANCE_THRESHOLD = 0.01  # Xóa cột có variance < 0.01
+HIGH_CORRELATION_THRESHOLD = 0.95  # Phát hiện multicollinearity
+DUPLICATE_CHECK = True
+
+# Các cột cần loại bỏ (không cần cho ML)
+# Value_Raw, Wage_Raw, Wage_Numeric gây DATA LEAKAGE vì chúng encode target variable
+COLUMNS_TO_DROP = ['Player_URL', 'Name', 'Team', 'Nationality', 'Value_Raw', 'Wage_Raw', 'Wage_Numeric']
+
+# ==================== IMPUTATION ====================
+NUMERIC_IMPUTATION_STRATEGY = 'median'  # 'mean', 'median', 'mode', 'knn'
+CATEGORICAL_IMPUTATION_STRATEGY = 'most_frequent'  # 'most_frequent', 'constant'
+KNN_NEIGHBORS = 5  # Số neighbors cho KNN Imputer
+
+# ==================== ENCODING ====================
+CATEGORICAL_ENCODING_METHOD = 'onehot'  # 'onehot', 'label', 'target'
+MAX_CATEGORIES = 10  # Giới hạn số categories cho OneHot
+
+# ==================== SCALING ====================
+SCALING_METHOD = None  # Tắt scaling cho Custom Decision Tree. Options: None, 'standard', 'minmax', 'robust'
+
+# ==================== FEATURE ENGINEERING ====================
+CREATE_POLYNOMIAL_FEATURES = False
+POLYNOMIAL_DEGREE = 2
+FEATURE_SELECTION_METHOD = None  # Tắt feature selection: None, 'variance', 'correlation', 'model_based'
+N_FEATURES_TO_SELECT = None  # None = keep all, hoặc số features muốn giữ
+
+# ==================== TRAIN/TEST SPLIT ====================
+TEST_SIZE = 0.2
+VALIDATION_SIZE = 0.1  # Từ train set
+RANDOM_STATE = 42
+STRATIFY_COLUMN = None  # Tên cột để stratify (cho classification)
+
+# ==================== HANDLE IMBALANCED ====================
+HANDLE_IMBALANCED = False  # True nếu là classification và data imbalanced
+IMBALANCED_METHOD = 'smote'  # 'smote', 'adasyn', 'random_oversample', 'random_undersample'
+
+# ==================== MODEL TRAINING ====================
+TASK_TYPE = 'regression'  # 'regression' hoặc 'classification'
+TARGET_COLUMN = 'Value_Numeric'  # Cột target
+USE_LOG_TRANSFORM = False  # Tắt log transform để test ảnh hưởng
+
+# Models để train
+MODELS = {
+
+    'regression': [
+        'CustomRegressionTree_MSE',         # Custom Regression Tree (MSE) - TỰ LÀM
+        'CustomRegressionTree_MAE',         # Custom Regression Tree (MAE) - TỰ LÀM
+        'DecisionTreeRegressor_Sklearn',    # Sklearn DecisionTreeRegressor
+        'KNN',                              # KNN Regressor (sklearn)
+        'KNN_Custom',                       # KNN Custom (nếu có)
+        'HistGradientBoosting_Custom',      # Custom HistGradientBoosting - TỰ LÀM
+        'HistGradientBoosting_Sklearn',     # Sklearn HistGradientBoosting
+    ],
+    'classification': [
+        'CustomDecisionTree_IG',      # Custom Decision Tree (Information Gain) - TỰ LÀM
+        'CustomDecisionTree_Gini',    # Custom Decision Tree (Gini Impurity) - TỰ LÀM
+    ]
+}
+
+# KNN
+KNN_CONFIG = {
+    'n_neighbors': 30,  # Tăng để giảm overfitting
+    'weights': 'uniform',  # Đổi từ 'distance' sang 'uniform' để giảm overfitting
+    'metric': 'euclidean'
+}
+
+# ==================== EVALUATION ====================
+REGRESSION_METRICS = ['mae', 'mse', 'rmse', 'r2', 'mape']
+CLASSIFICATION_METRICS = ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']
+
+# ==================== LOGGING ====================
+VERBOSE = True
+SAVE_PLOTS = True
+PLOT_FORMAT = 'png'  # 'png', 'jpg', 'pdf'
+
+# ==================== MULTI-LABEL ENCODING ====================
+MULTI_LABEL_COLUMNS = ['Positions']  # Các cột có multi-label (CM, CDM, CAM, ...)
+MULTI_LABEL_DELIMITER = ', '  # Delimiter giữa các labels

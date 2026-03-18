@@ -1,8 +1,49 @@
 import numpy as np
 import pandas as pd
 from typing import Union, Dict, Any
-from Metrics.giniImpurity import compute_Gini_Gain
-from Metrics.informationGain import compute_information_gain
+
+
+def compute_entropy(target_column):
+    """Tính entropy của một cột target"""
+    elements, counts = np.unique(target_column, return_counts=True)
+    entropy = -np.sum([(count/np.sum(counts)) * np.log2(count/np.sum(counts)) 
+                       for count in counts])
+    return entropy
+
+
+def compute_information_gain(data, split_feature, target_name):
+    """Tính Information Gain khi split theo feature"""
+    total_entropy = compute_entropy(data[target_name])
+    
+    vals, counts = np.unique(data[split_feature], return_counts=True)
+    weighted_entropy = np.sum([(counts[i]/np.sum(counts)) * 
+                               compute_entropy(data.where(data[split_feature]==vals[i]).dropna()[target_name])
+                               for i in range(len(vals))])
+    
+    information_gain = total_entropy - weighted_entropy
+    return information_gain
+
+
+def compute_gini_impurity(target_column):
+    """Tính Gini Impurity"""
+    elements, counts = np.unique(target_column, return_counts=True)
+    probabilities = counts / np.sum(counts)
+    gini = 1 - np.sum(probabilities ** 2)
+    return gini
+
+
+def compute_Gini_Gain(data, split_feature, target_name):
+    """Tính Gini Gain khi split theo feature"""
+    total_gini = compute_gini_impurity(data[target_name])
+    
+    vals, counts = np.unique(data[split_feature], return_counts=True)
+    weighted_gini = np.sum([(counts[i]/np.sum(counts)) * 
+                            compute_gini_impurity(data.where(data[split_feature]==vals[i]).dropna()[target_name])
+                            for i in range(len(vals))])
+    
+    gini_gain = total_gini - weighted_gini
+    return gini_gain
+
 
 class Node:
     """Đại diện cho một nút trong cây quyết định"""
@@ -259,3 +300,5 @@ if __name__ == "__main__":
     print("=" * 60)
 
 
+# Alias for sklearn-like naming
+DecisionTreeClassifier = DecisionTree

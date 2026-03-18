@@ -1,0 +1,158 @@
+﻿---
+
+# CHIẾN LƯỢC
+
+## **NHÓM VISUALIZATIONS CHÍNH**
+
+### **1. Data Quality Assessment** (Trước Preprocessing)
+- Missing data heatmap & bar chart
+- Duplicates detection
+- Outlier identification
+- **Insight**: Xác định cột cần xóa, imputation strategy
+
+### **2. Target Variable Analysis**
+- Distribution plots (original & log-transformed)
+- Box plots by rating tiers
+- Value vs Wage relationship
+- **Insight**: Log transformation cần thiết, identify outliers (superstars)
+
+### **3. Feature Distributions**
+- Histogram grids cho numerical features
+- Bar charts cho categorical features
+- Physical attributes analysis (Height, Weight, BMI)
+- **Insight**: Understand data ranges, detect bimodal distributions (GK stats)
+
+### **4. Correlation Analysis**
+- Full correlation heatmap
+- Top correlations with target
+- Multicollinearity detection
+- **Insight**: Feature redundancy, top predictors identification
+
+### **5. Age & Career Dynamics**
+- Age vs Value curve (peak age effect)
+- Potential vs Overall gap by age
+- Career trajectory analysis
+- **Insight**: Investment timing, scouting young talents
+
+### **6. Preprocessing Impact Visualizations**
+- Before/After comparisons for each step
+- Feature count changes
+- Distribution preservation checks
+- Correlation structure after multicollinearity removal
+- **Insight**: Validate preprocessing decisions
+
+### **7. Model Diagnostics** (Sau Training)
+- Actual vs Predicted scatter plot
+- Residual plots (homoscedasticity check)
+- Residuals distribution & Q-Q plot
+- Learning curves (bias-variance tradeoff)
+- **Insight**: Model performance, assumptions validation
+
+### **8. Business Intelligence**
+- Position value premium analysis
+- Nationality value comparison
+- Skill profiles by value tiers
+- Top talent identification
+- **Insight**: Actionable insights cho scouting & investment
+
+---
+
+## **KEY INSIGHTS TỪ DATASET**
+
+### **Data Characteristics**
+1. **Dataset size**: ~70 cầu thủ trong sample (full dataset lớn hơn)
+2. **Features**: 47 columns (Demographics, Performance, Skills, Financials)
+3. **Target**: `Value_Numeric` (right-skewed, need log transform)
+4. **Missing data**: GK stats thiếu ở outfield players (systematic)
+
+### **Target Variable (Value)**
+1. **Distribution**: Highly right-skewed (Skewness > 2)
+2. **Range**: €0 - €172.5M (Haaland highest in sample)
+3. **Log transformation**: Essential for regression
+4. **Correlation with Overall**: Very strong (r > 0.9)
+
+### **Top Predictive Features**
+1. **Overall Rating** (r ≈ 0.95)
+2. **Potential** (r ≈ 0.90)
+3. **Wage_Numeric** (r ≈ 0.88)
+4. **Technical Skills**: Ball_control, Reactions, Composure
+5. **Age**: Inverted U-shape relationship (peak at 25-28)
+
+### **Age Insights**
+1. **Peak value age**: 26-27 years
+2. **Young talents** (16-21): Highest potential gap
+3. **Declining phase**: Starts after 29-30
+4. **Investment strategy**:
+   - Buy: 20-23 (before peak, high growth)
+   - Hold: 24-28 (peak performance)
+   - Sell: 29+ (before decline)
+
+### **Market Dynamics**
+1. **Nationality premium**: France, Brazil, England có value cao
+2. **Position premium**:
+   - Highest: ST, CAM, CB
+   - Lowest: FB, CDM (except elite)
+3. **Team effect**: Big clubs → Higher value (brand premium)
+4. **Right-footed majority**: ~75% (need balanced dataset for position-specific models)
+
+### **Skill Patterns**
+1. **Multicollinearity**: High correlation between similar skills
+   - Pace: Acceleration + Sprint_speed
+   - Shooting: Finishing + Shot_power + Long_shots
+   - Passing: Short + Long passing + Vision
+2. **Composite features**: Better predictors than individual
+3. **Position-specific skills**: Crucial for multi-task models
+
+### **Preprocessing Recommendations**
+
+#### **Data Cleaning**
+- Remove duplicates (nếu có)
+- Drop columns: Player_URL, Value_Raw, Wage_Raw (redundant)
+- Drop high-missing columns (>50% missing): Potential GK stats cho non-GK models
+- Detect multicollinearity: Remove one from highly correlated pairs (r > 0.95)
+
+#### **Imputation**
+- Numerical (skills): **Median** (robust to outliers)
+- Categorical: **Mode** (most frequent)
+- GK stats for non-GK: **Fill with 0** or **separate indicator**
+- Avoid KNN imputation (too slow for large dataset)
+
+#### **Encoding**
+- **OneHot**: Preferred_Foot (2 categories), Position (after parsing)
+- **Label/Ordinal**: Team, Nationality (high cardinality)
+- **Target Encoding**: For Nationality if value varies significantly
+- **Multi-label**: Positions (parse "CAM, CM, CDM" → separate features)
+
+#### **Scaling**
+- **StandardScaler**: Best for most ML models (centering + variance normalization)
+- **RobustScaler**: If outliers persist after cleaning
+- Avoid MinMaxScaler: Sensitive to outliers
+- **Don't scale target** for tree-based models
+
+#### **Feature Engineering**
+1. **Create composite features**:
+   - `Pace` = mean(Acceleration, Sprint_speed)
+   - `Shooting` = mean(Finishing, Shot_power, Long_shots)
+   - `Passing` = mean(Short_passing, Long_passing, Vision)
+   - `Dribbling_Composite` = mean(Dribbling, Ball_control, Agility)
+   - `Defending` = mean(Standing_tackle, Sliding_tackle, Marking)
+   - `Physical` = mean(Strength, Stamina, Jumping)
+
+2. **Create interaction features**:
+   - `BMI` = Weight_kg / (Height_cm/100)²
+   - `Age_squared` = Age²
+   - `Potential_Gap` = Potential - Overall
+   - `Value_per_Overall` = Value_Numeric / Overall
+
+3. **Feature Selection**:
+   - Method: **RandomForest Feature Importance** or **RFE**
+   - Target: Keep top 30-40 features
+   - Remove: Low variance features (< 0.01)
+
+#### **Target Transformation**
+- **Log transform**: `log(Value_Numeric + 1)`
+- Benefits:
+  - Normal distribution
+  - Reduce outlier impact
+  - Interpretable (% change vs absolute)
+- Remember to **inverse transform** predictions: `exp(pred) - 1
